@@ -1,4 +1,3 @@
-
 import streamlit as st
 
 price = "price"
@@ -16,7 +15,7 @@ if "history"not in st.session_state:
     st.session_state.history = {name: 0 for name in products}
 
 
-with st.form("input_form"):
+with st.form("input_form", clear_on_submit=True):
     st.subheader("商品ごとの個数入力")
     current_input = {}
 
@@ -31,11 +30,10 @@ with st.form("input_form"):
         )
                 current_input[name] = quantity
     submit_button = st.form_submit_button("完了")
-    with st.form("input_form",clear_on_submit=True):
-                submit_button = st.form_submit_button("完了")
+    
 if submit_button:
-    for name in products:
-        st.session_state.pop(name, None)
+    for name, quantity in current_input.items():
+        st.session_state.history[name] += quantity
         st.success("入力が完了しました。")
     
     st.rerun()
