@@ -16,6 +16,8 @@ st.write("個数の入力")
 if "history"not in st.session_state:
     st.session_state.history = {name: 0 for name in products}
 
+if "sales_log" not in st.session_state:
+    st.session_state.sales_log = []
 
 with st.form("sales_form", clear_on_submit=True):
     st.subheader("商品ごとの個数入力")
@@ -35,7 +37,17 @@ with st.form("sales_form", clear_on_submit=True):
     
 if submit_button:
     for name, quantity in current_input.items():
-        st.session_state.history[name] += quantity
+
+        if quantity > 0:
+            st.session_state.sales_log.append({
+                 "日時":pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S"),
+                 "商品名":name,
+                "個数":quantity, 
+                "売上":quantity * products[name]["price"],
+                "原価":quantity * products[name]["cost"],
+                "利益":quantity * (products[name]["price"] - products[name]["cost"])
+            }) 
+            st.session_state.history[name] += quantity
     st.success("入力が完了しました。")
 
 st.divider()
@@ -73,35 +85,29 @@ col2.metric("合計売上",f"{total_sales:,.0f}円")
 col3.metric("合計原価",f"{total_cost:,.0f}円")
 col4.metric("合計利益",f"{total_profit:,.0f}円")
 
-excel_details = []
+st.subheader("入力履歴")
 
-for d in details:
-    excel_details.append({
-        "商品名": d["name"],
-        "個数": d["quantity"],
-        "売上": d["sales"],
-        "原価": d["cost"],
-        "利益": d["profit"]
-    })
-for d in details:
-    st.markdown(f"**{d['name']}**")
-    st.write(f"個数: {d['quantity']}個")
-    st.write(f"売上: {d['sales']:,.0f}円")
-    st.write(f"原価: {d['cost']:,.0f}円")
-    st.write(f"利益: {d['profit']:,.0f}円")
-    st.markdown("---")
+log_df = pd.DataFrame(st.session_state.sales_log)
 
-    df = pd.DataFrame(excel_details)
+if not log_df.empty:
+
+    st.dataframe(log_df)
 
     output = BytesIO()
+
     with pd.ExcelWriter(output, engine="openpyxl") as writer:
-        df.to_excel(writer, index=False, sheet_name="売上詳細")
+        log_df.to_excel(
+            writer,
+            index=False,
+            sheet_name="売上履歴"
+        )
+
     excel_data = output.getvalue()
 
-st.download_button(
+    st.download_button(
         label="Excelでダウンロード",
         data=excel_data,
-        file_name="売上詳細.xlsx",
+        file_name="売上履歴.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
 
