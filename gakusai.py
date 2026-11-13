@@ -98,7 +98,7 @@ for d in details:
         df.to_excel(writer, index=False, sheet_name="売上詳細")
     excel_data = output.getvalue()
 
-    st.download_button(
+st.download_button(
         label="Excelでダウンロード",
         data=excel_data,
         file_name="売上詳細.xlsx",
