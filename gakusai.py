@@ -1,4 +1,36 @@
 import streamlit as st
+import pandas as pd
+from io import BytesIO
+
+if "date_list" not in st.session_state:
+    st.session_state.date_list = []
+
+with st.form("input_form"):
+     product_name = st.selectbox("商品名",["チーズスティック","さつまいもスティック","コーヒー","ココア"])
+     quantity = st.number_input("個数",min_value=1,value=1)
+     submit_button = st.form_submit_button("完了")
+
+if submit_button:
+     st.session_state.date_list.append({"商品名": product_name, "個数": quantity})
+
+if st.session_state.date_list:
+    df = pd.DataFrame(st.session_state.date_list)
+    st.subheader("入力履歴")
+    st.dataframe(df)
+
+output = BytesIO()
+with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
+    df.to_excel(writer, index=False, sheet_name="売上データ")
+excel_data = output.getvalue()
+
+st.download_button(
+    
+    label="Excelでダウンロード",
+    data=excel_data,
+    file_name="売上データ.xlsx",
+    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+)
+
 
 price = "price"
 cost = "cost"
