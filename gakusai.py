@@ -1,4 +1,3 @@
-
 import streamlit as st
 
 price = "price"
@@ -45,19 +44,19 @@ total_profit = 0
 
 
 details = []
-for name, quantity in products.items():
+for name, product in products.items():
+    quantity = st.session_state.history.get(name, 0)
     sales = quantity * product["price"]
     cost = quantity * product["cost"]
     profit = sales - cost
-    details.append((name, quantity, sales, cost, profit))
     total_quantity += quantity
     total_sales += sales
-total_cost += cost
-total_profit += profit
+    total_cost += cost
+    total_profit += profit
 
 details.append({
     "name":name,
-    quantity:quantity,
+    "quantity":quantity,
     "sales":sales,
     "cost":cost,
     "profit":profit
