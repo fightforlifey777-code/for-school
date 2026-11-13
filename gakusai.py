@@ -10,27 +10,6 @@ with st.form("product_form"):
      quantity = st.number_input("個数",min_value=1,value=1)
      submit_button = st.form_submit_button("完了")
 
-if submit_button:
-     st.session_state.date_list.append({"商品名": product_name, "個数": quantity})
-
-if st.session_state.date_list:
-    df = pd.DataFrame(st.session_state.date_list)
-    st.subheader("入力履歴")
-    st.dataframe(df)
-
-    output = BytesIO()
-    with pd.ExcelWriter(output, engine="openpyxl") as writer:
-        df.to_excel(writer, index=False, sheet_name="売上データ")
-    excel_data = output.getvalue()
-
-    st.download_button(
-    
-        label="Excelでダウンロード",
-        data=excel_data,
-        file_name="売上データ.xlsx",
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-)
-
 
 price = "price"
 cost = "cost"
@@ -103,6 +82,16 @@ col2.metric("合計売上",f"{total_sales:,.0f}円")
 col3.metric("合計原価",f"{total_cost:,.0f}円")
 col4.metric("合計利益",f"{total_profit:,.0f}円")
 
+excel_details = []
+
+for d in details:
+    excel_details.append({
+        "商品名": d["name"],
+        "個数": d["quantity"],
+        "売上": d["sales"],
+        "原価": d["cost"],
+        "利益": d["profit"]
+    })
 for d in details:
     st.markdown(f"**{d['name']}**")
     st.write(f"個数: {d['quantity']}個")
@@ -110,6 +99,20 @@ for d in details:
     st.write(f"原価: {d['cost']:,.0f}円")
     st.write(f"利益: {d['profit']:,.0f}円")
     st.markdown("---")
+
+    df = pd.DataFrame(excel_details)
+
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine="openpyxl") as writer:
+        df.to_excel(writer, index=False, sheet_name="売上詳細")
+    excel_data = output.getvalue()
+
+    st.download_button(
+        label="Excelでダウンロード",
+        data=excel_data,
+        file_name="売上詳細.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
 
 if st.button("リセット"):
     st.session_state.history = {name: 0 for name in products}
