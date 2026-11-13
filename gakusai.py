@@ -1,4 +1,3 @@
-
 import streamlit as st
 
 price = "price"
@@ -20,17 +19,18 @@ with st.form("input_form"):
     st.subheader("商品ごとの個数入力")
     current_input = {}
 
-for name, product in products.items():
-    quantity = st.number_input(
-        f"{name}\n (売値: {product["price"]}円, 原価: {product["cost"]}円)", 
-        min_value=0,
-        value=0,
-        step=1,
-        key=f"input_{name}"
-    )
-    current_input[name] = quantity
+    for name, product in products.items():
+        
+                quantity = st.number_input(
+                    f"{name}\n (売値: {product["price"]}円, 原価: {product["cost"]}円)", 
+                    min_value=0,
+                    value=0,
+                    step=1,
+                    key=name
+        )
+                current_input[name] = quantity
 
-submit_button = st.button("完了")
+    submit_button = st.button("完了")
 
 if submit_button:
     for name, quantity in current_input.items():
