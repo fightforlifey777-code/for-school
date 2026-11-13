@@ -102,8 +102,7 @@ for d in details:
         label="Excelでダウンロード",
         data=excel_data,
         file_name="売上詳細.xlsx",
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        key="excel_download"
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
 
 if st.button("リセット"):
