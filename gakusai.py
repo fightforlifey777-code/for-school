@@ -23,6 +23,7 @@ for name, product in products.items():
     quantity = st.number_input(
         f"{name}\n (売値: {product["price"]}円, 原価: {product["cost"]}円)", 
         min_value=0,
+        value=0,
         step=1,
         key=f"input_{name}"
     )
