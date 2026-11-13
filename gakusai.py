@@ -27,7 +27,7 @@ with st.form("sales_form", clear_on_submit=True):
     for name, product in products.items():
         
                 quantity = st.number_input(
-                    f"{name}\n (売値:{product["price"]}円、原価: {product["cost"]}円)", 
+                    f"{name}\n (売値:{product['price']}円、原価: {product['cost']}円)", 
                     min_value=0,
                     value=0,
                     step=1,
@@ -54,9 +54,18 @@ if submit_button:
                 "profit": profit
             }
 
-            requests.post("https://script.google.com/macros/s/AKfycbxJZlxFyvV7zY8CilbexHPYid36Z8-LPLIHonnU8PXB6gTHYLeBG8TrTs5ometTCzPqjg/exec", json=payload)
-
-            st.session_state.history[name] += quantity
+            response = requests.post("https://script.google.com/macros/s/AKfycbxO9ZUgWfZ1yIDmIZpUmwkhEcQXHHbnz3ZWvhNkD3QeoWmzWGEo2Lx5wSimkNIBt3Vrmg/exec", json=payload)
+        st.write("Status:", response.status_code)
+        st.write("Response:", response.text)
+        st.session_state.sales_log.append({
+            "日時": payload["datetime"],
+            "商品": payload["product"],
+            "個数": payload["quantity"],
+            "売上": payload["sales"],
+            "原価": payload["cost"],
+            "利益": payload["profit"]
+        })
+    st.session_state.history[name] += quantity
     st.success("入力が完了しました。")
 
 
