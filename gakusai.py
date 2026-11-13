@@ -2,15 +2,6 @@ import streamlit as st
 import pandas as pd
 from io import BytesIO
 
-if "date_list" not in st.session_state:
-    st.session_state.date_list = []
-
-with st.form("product_form"):
-     product_name = st.selectbox("商品名",["チーズスティック","さつまいもスティック","コーヒー","ココア"])
-     quantity = st.number_input("個数",min_value=1,value=1)
-     submit_button = st.form_submit_button("完了")
-
-
 price = "price"
 cost = "cost"
 products = {
