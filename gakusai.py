@@ -54,7 +54,7 @@ if submit_button:
                 "profit": profit
             }
 
-            requests.post("https://script.google.com/macros/s/AKfycbzJRJAFIy_Pec7FnWyZzsYt_UZF-QX9BXGkYQV76XhasEFHw8MATkAJfvF_pwd6-72Hvg/exec", json=payload)
+            requests.post("https://script.google.com/macros/s/AKfycbwbbl-1SFhwHboLfB8cf4HYLfrccDAwt8qv0MAEOgWKq0TmKF-4LY8Ev9vkbaW85CAk_w/exec", json=payload)
 
             st.session_state.history[name] += quantity
     st.success("入力が完了しました。")
@@ -95,8 +95,6 @@ col2.metric("合計売上",f"{total_sales:,.0f}円")
 col3.metric("合計原価",f"{total_cost:,.0f}円")
 col4.metric("合計利益",f"{total_profit:,.0f}円")
 
-st.subheader("入力履歴")
-
 log_df = pd.DataFrame(st.session_state.sales_log)
 
 if not log_df.empty:
@@ -110,7 +108,10 @@ if not log_df.empty:
             writer,
             index=False,
             sheet_name="売上履歴"
+            
         )
+    
+    
 
     excel_data = output.getvalue()
 
