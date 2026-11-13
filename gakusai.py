@@ -35,6 +35,10 @@ if submit_button:
     for name, quantity in current_input.items():
         st.session_state.history[name] += quantity
     st.success("入力が完了しました。")
+    for name in products:
+        st.session_state[name] = 0
+
+    st.rerun()
 
     for name in products:
         st.session_state[name] = 0
