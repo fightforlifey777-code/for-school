@@ -6,10 +6,11 @@ from io import BytesIO
 price = "price"
 cost = "cost"
 products = {
-    "チーズスティック":{price: 500,"cost": 300},
-    "さつまいもスティック":{price: 400,"cost": 200},
-    "コーヒー":{price: 600,"cost": 100},
-    "ココア":{price: 300,"cost": 150},
+    "チーズスティック(3本)":{price: 300,"cost": 85.2},
+    "チーズスティック(5本)":{price: 400,"cost": 132},
+    "さつまいもスティック":{price: 250,"cost": 71.3},
+    "コーヒー":{price: 300,"cost": 157},
+    "ココア":{price: 200,"cost": 62.5},
     }
 st.title("学祭の売り上げ計算アプリ")
 st.write("個数の入力")
@@ -55,6 +56,7 @@ if submit_button:
             }
 
             response = requests.post("https://script.google.com/macros/s/AKfycbxO9ZUgWfZ1yIDmIZpUmwkhEcQXHHbnz3ZWvhNkD3QeoWmzWGEo2Lx5wSimkNIBt3Vrmg/exec", json=payload)
+
             st.session_state.sales_log.append({
             "日時": payload["datetime"],
             "商品": payload["product"],
