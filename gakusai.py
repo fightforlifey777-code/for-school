@@ -30,7 +30,7 @@ with st.form("input_form"):
         )
                 current_input[name] = quantity
 
-    with st.form("input_form,clear_on_submit=True"):
+    with st.form("input_form",clear_on_submit=True):
                 submit_button = st.form_submit_button("完了")
 if submit_button:
     for name, quantity in current_input.items():
