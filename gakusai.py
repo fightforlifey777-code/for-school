@@ -5,7 +5,7 @@ from io import BytesIO
 if "date_list" not in st.session_state:
     st.session_state.date_list = []
 
-with st.form("input_form"):
+with st.form("product_form"):
      product_name = st.selectbox("商品名",["チーズスティック","さつまいもスティック","コーヒー","ココア"])
      quantity = st.number_input("個数",min_value=1,value=1)
      submit_button = st.form_submit_button("完了")
@@ -47,7 +47,7 @@ if "history"not in st.session_state:
     st.session_state.history = {name: 0 for name in products}
 
 
-with st.form("input_form", clear_on_submit=True):
+with st.form("sales_form", clear_on_submit=True):
     st.subheader("商品ごとの個数入力")
     current_input = {}
 
