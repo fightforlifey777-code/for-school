@@ -18,17 +18,17 @@ if st.session_state.date_list:
     st.subheader("入力履歴")
     st.dataframe(df)
 
-output = BytesIO()
-with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
-    df.to_excel(writer, index=False, sheet_name="売上データ")
-excel_data = output.getvalue()
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine="openpyxl") as writer:
+        df.to_excel(writer, index=False, sheet_name="売上データ")
+    excel_data = output.getvalue()
 
-st.download_button(
+    st.download_button(
     
-    label="Excelでダウンロード",
-    data=excel_data,
-    file_name="売上データ.xlsx",
-    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        label="Excelでダウンロード",
+        data=excel_data,
+        file_name="売上データ.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
 
 
@@ -40,7 +40,7 @@ products = {
     "コーヒー":{price: 600,"cost": 100},
     "ココア":{price: 300,"cost": 150},
     }
-st. title("学祭の売り上げ計算アプリ")
+st.title("学祭の売り上げ計算アプリ")
 st.write("個数の入力")
 
 if "history"not in st.session_state:
@@ -54,7 +54,7 @@ with st.form("input_form", clear_on_submit=True):
     for name, product in products.items():
         
                 quantity = st.number_input(
-                    f"{name}\n (売値: {product["price"]}円, 原価: {product["cost"]}円)", 
+                    f"{name}\n (売値:{product["price"]}円、原価: {product["cost"]}円)", 
                     min_value=0,
                     value=0,
                     step=1,
@@ -66,14 +66,7 @@ with st.form("input_form", clear_on_submit=True):
 if submit_button:
     for name, quantity in current_input.items():
         st.session_state.history[name] += quantity
-        st.success("入力が完了しました。")
-    
-    st.rerun()
-
-    for name in products:
-        st.session_state[name] = 0
-
-    st.rerun()
+    st.success("入力が完了しました。")
 
 st.divider()
 
