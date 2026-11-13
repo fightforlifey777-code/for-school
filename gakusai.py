@@ -1,4 +1,5 @@
 import streamlit as st
+import requests
 import pandas as pd
 from io import BytesIO
 
@@ -39,16 +40,25 @@ if submit_button:
     for name, quantity in current_input.items():
 
         if quantity > 0:
-            st.session_state.sales_log.append({
-                 "日時":pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S"),
-                 "商品名":name,
-                "個数":quantity, 
-                "売上":quantity * products[name]["price"],
-                "原価":quantity * products[name]["cost"],
-                "利益":quantity * (products[name]["price"] - products[name]["cost"])
-            }) 
+
+            sales = quantity * products[name]["price"]
+            cost = quantity * products[name]["cost"]
+            profit = sales - cost
+
+            payload = {
+                "datetime": pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "product": name,
+                "quantity": quantity,
+                "sales": sales,
+                "cost": cost,
+                "profit": profit
+            }
+
+            requests.post("https://script.google.com/macros/s/AKfycbzJRJAFIy_Pec7FnWyZzsYt_UZF-QX9BXGkYQV76XhasEFHw8MATkAJfvF_pwd6-72Hvg/exec", json=payload)
+
             st.session_state.history[name] += quantity
     st.success("入力が完了しました。")
+
 
 st.divider()
 
