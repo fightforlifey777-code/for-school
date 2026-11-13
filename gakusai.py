@@ -30,15 +30,13 @@ with st.form("input_form"):
         )
                 current_input[name] = quantity
 
-    submit_button = st.form_submit_button("完了")
-
+    with st.form("input_form,clear_on_submit=True"):
+                submit_button = st.form_submit_button("完了")
 if submit_button:
     for name, quantity in current_input.items():
         st.session_state.history[name] += quantity
     st.success("入力が完了しました。")
-    for name in products:
-        st.session_state[name] = 0
-
+    
     st.rerun()
 
     for name in products:
