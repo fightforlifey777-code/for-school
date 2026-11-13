@@ -54,7 +54,7 @@ if submit_button:
                 "profit": profit
             }
 
-            requests.post("https://script.google.com/macros/s/AKfycbwbbl-1SFhwHboLfB8cf4HYLfrccDAwt8qv0MAEOgWKq0TmKF-4LY8Ev9vkbaW85CAk_w/exec", json=payload)
+            requests.post("https://script.google.com/macros/s/AKfycbwudUoosoxT318UiwVk3i1kH9o2qCpM1VlmcxXC64jyLFkAWHkHisX_rvzu0tnBfLiEkg/exec", json=payload)
 
             st.session_state.history[name] += quantity
     st.success("入力が完了しました。")
