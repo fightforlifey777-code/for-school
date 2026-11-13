@@ -55,8 +55,6 @@ if submit_button:
             }
 
             response = requests.post("https://script.google.com/macros/s/AKfycbxO9ZUgWfZ1yIDmIZpUmwkhEcQXHHbnz3ZWvhNkD3QeoWmzWGEo2Lx5wSimkNIBt3Vrmg/exec", json=payload)
-        st.write("Status:", response.status_code)
-        st.write("Response:", response.text)
         st.session_state.sales_log.append({
             "日時": payload["datetime"],
             "商品": payload["product"],
