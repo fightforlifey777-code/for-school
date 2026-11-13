@@ -35,6 +35,11 @@ if submit_button:
         st.session_state.history[name] += quantity
     st.success("入力が完了しました。")
 
+    for name in products:
+        st.session_state[name] = 0
+
+    st.rerun()
+
 st.divider()
 
 total_quantity = 0
@@ -54,12 +59,12 @@ for name, product in products.items():
     total_cost += cost
     total_profit += profit
 
-details.append({
-    "name":name,
-    "quantity":quantity,
-    "sales":sales,
-    "cost":cost,
-    "profit":profit
+    details.append({
+        "name":name,
+        "quantity":quantity,
+        "sales":sales,
+        "cost":cost,
+        "profit":profit
 })
 
 st.divider()
